@@ -1,0 +1,17 @@
+{
+  "name": "api-restful-booker",
+  "version": "1.0.0",
+  "description": "Projeto de testes de API com Cypress | Restful-Booker",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "report": "allure generate allure-results --clean -o reports/allure-report",
+    "report:open": "allure open reports/allure-report"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0",
+    "allure-commandline": "^2.29.0",
+    "ajv": "^8.12.0",
+    "@faker-js/faker": "^8.0.2"
+  }
+}
