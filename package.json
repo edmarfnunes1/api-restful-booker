@@ -2,16 +2,21 @@
   "name": "api-restful-booker",
   "version": "1.0.0",
   "description": "Projeto de testes de API com Cypress | Restful-Booker",
-  "scripts": {
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "report": "allure generate allure-results --clean -o reports/allure-report",
-    "report:open": "allure open reports/allure-report"
-  },
+"scripts": {
+  "cy:open": "cypress open",
+  "cy:runNormal": "cypress run",
+  "cy:run": "cypress run --env allure=true",
+  "allure:clean": "rimraf allure-results reports/allure-report reports/results.xml",
+  "allure:report": "allure generate allure-results --clean -o reports/allure-report",
+  "allure:open": "allure open reports/allure-report",
+  "test:api": "npm run allure:clean && npm run cy:run && npm run allure:report && npm run allure:open"
+},
   "devDependencies": {
-    "cypress": "^13.6.0",
-    "allure-commandline": "^2.29.0",
+    "@faker-js/faker": "^8.0.2",
+    "@shelex/cypress-allure-plugin": "2.41.2",
     "ajv": "^8.12.0",
-    "@faker-js/faker": "^8.0.2"
+    "allure-commandline": "2.35.1",
+    "cypress": "^13.6.0",
+    "rimraf": "6.1.2"
   }
 }
