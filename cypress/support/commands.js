@@ -1,10 +1,11 @@
-Cypress.Commands.add("createToken", () => {
+Cypress.Commands.add("auth", (username, password) => {
   return cy.request({
     method: "POST",
     url: "/auth",
+    failOnStatusCode: false,
     body: {
-      username: "admin",
-      password: "password123"
+      username: username, 
+      password: password 
     }
   });
 });

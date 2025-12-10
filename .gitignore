@@ -12,6 +12,8 @@ yarn-error.log*
 # Environment variables
 .env
 .env.* 
+cypress.env.json
+
 
 # Node dependencies
 node_modules/
