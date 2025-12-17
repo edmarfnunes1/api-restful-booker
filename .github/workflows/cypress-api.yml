@@ -1,10 +1,20 @@
+name: Cypress API Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   cypress-api:
     runs-on: ubuntu-latest
 
     env:
-      CYPRESS_AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
-      CYPRESS_AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+      AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+      AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
 
     steps:
       - name: Checkout codigo
@@ -26,7 +36,7 @@ jobs:
         run: npm install
 
       - name: Rodar testes de API com Cypress
-        run: npm run cy:run
+        run: npx cypress run --env allure=true,AUTH_USERNAME=${AUTH_USERNAME},AUTH_PASSWORD=${AUTH_PASSWORD}
 
       - name: Gerar relatorio Allure
         run: npm run allure:report
