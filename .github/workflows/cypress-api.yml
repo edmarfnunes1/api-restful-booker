@@ -1,20 +1,23 @@
-name: Cypress API Tests
+name: Cypress API Tests + Allure Report
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   cypress-api:
     runs-on: ubuntu-latest
-
-    env:
-      AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
-      AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
 
     steps:
       - name: Checkout codigo
@@ -23,8 +26,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: 20
+          cache: npm
 
       - name: Setup Java para Allure
         uses: actions/setup-java@v4
@@ -33,17 +36,39 @@ jobs:
           java-version: "17"
 
       - name: Instalar dependencias
-        run: npm install
+        run: npm ci
+
+      - name: Limpar resultados antigos
+        run: |
+          rm -rf allure-results
+          rm -rf reports/allure-report
+          rm -rf public
 
       - name: Rodar testes de API com Cypress
-        run: npx cypress run --env allure=true,AUTH_USERNAME=${AUTH_USERNAME},AUTH_PASSWORD=${AUTH_PASSWORD}
+        env:
+          AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+          AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+        run: |
+          npx cypress run \
+            --env allure=true,AUTH_USERNAME=${AUTH_USERNAME},AUTH_PASSWORD=${AUTH_PASSWORD}
 
       - name: Gerar relatorio Allure
-        run: npm run allure:report
+        run: npx allure generate allure-results --clean -o reports/allure-report
 
-      - name: Publicar relatorio Allure como artifact
-        uses: actions/upload-artifact@v4
+      - name: Preparar Allure para GitHub Pages
+        run: |
+          mkdir public
+          cp -r reports/allure-report/* public/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: allure-report
-          path: reports/allure-report
-          retention-days: 7
+          path: public
+
+  deploy:
+    needs: cypress-api
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy no GitHub Pages
+        uses: actions/deploy-pages@v4
