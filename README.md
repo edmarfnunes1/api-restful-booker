@@ -34,3 +34,5 @@ Os testes já cobrem:
 ✔ Sem password
 
 Esses cenários garantem uma validação completa da autenticação mínima.
+📊 Relatório Allure (CI)
+https://edmarfnunes1.github.io/api-restful-booker/
