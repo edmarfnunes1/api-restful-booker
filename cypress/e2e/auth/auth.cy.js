@@ -10,7 +10,7 @@ describe("POST /auth - Geração de Token", () => {
     })
   });
 
-  it("Não deve autenticar com senha incorreta", () => {
+  it("Não deve autenticar com senha incorreta ", () => {
     cy.auth(Cypress.env("AUTH_USERNAME"), faker.internet.password()).then(response => {
       expect(response.status).to.eq(200)
       expect(response.body).to.have.property("reason", "Bad credentials")
