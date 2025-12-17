@@ -1,14 +1,10 @@
-name: Cypress API Tests
-
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-
 jobs:
   cypress-api:
     runs-on: ubuntu-latest
+
+    env:
+      CYPRESS_AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+      CYPRESS_AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
 
     steps:
       - name: Checkout codigo
