@@ -1,38 +1,33 @@
-🧪 API Restful Booker – Testes Automatizados com Cypress
+# 🧪 API Restful Booker – Testes Automatizados com Cypress
 
-Este repositório contém um projeto profissional de testes automatizados de API, utilizando Cypress 13+ para validar os endpoints da API pública Restful-Booker.
+Projeto de testes automatizados de API usando **Cypress (v13+)**, validando a API pública **Restful-Booker**.  
+A ideia é manter uma automação **enxuta, organizada e escalável**
 
-O objetivo é demonstrar uma automação moderna, modular, organizada e alinhada com as boas práticas de QA, servindo como parte do meu portfólio técnico.
 
-🚀 Tecnologias Utilizadas
+## 🔗 Relatório Allure (GitHub Pages)
+A cada push na branch `main`, o pipeline executa os testes, gera o relatório e publica no Pages:
 
-Cypress (API Testing)
+➡️ **Allure Report:** https://edmarfnunes1.github.io/api-restful-booker/
 
-Node.js
 
-AJV (validação de contrato)
+## ✅ O que já está implementado
 
-Faker.js (massa dinâmica – ainda será integrado)
+### 🔐 POST /auth – Geração de Token
+Cobertura atual:
 
-Allure Reports (será integrado futuramente)
+- ✅ Gera token com credenciais válidas
+- ✅ Não autentica com senha incorreta
+- ✅ Não autentica com usuário incorreto
+- ✅ Não autentica com payload vazio
+- ✅ Não autentica sem `username`
+- ✅ Não autentica sem `password`
 
-🔐 Testes Implementados até o momento
-POST /auth – Geração de Token
 
-Os testes já cobrem:
+## 🧰 Tecnologias e Ferramentas
+- **Cypress** (API Testing)
+- **Node.js**
+- **Allure Reports** (geração e publicação via CI)
+- **GitHub Actions** (pipeline CI/CD)
+- **AJV** (validação de contrato – preparado para uso)
+- **@faker-js/faker** (massa dinâmica nos cenários negativos)
 
-✔ Sucesso ao gerar token com credenciais válidas
-
-✔ Senha incorreta
-
-✔ Usuário incorreto
-
-✔ Payload vazio
-
-✔ Sem username
-
-✔ Sem password
-
-Esses cenários garantem uma validação completa da autenticação mínima.
-📊 Relatório Allure (CI)
-https://edmarfnunes1.github.io/api-restful-booker/
