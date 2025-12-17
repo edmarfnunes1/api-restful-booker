@@ -2,16 +2,16 @@ name: Cypress API Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   cypress-api:
     runs-on: ubuntu-latest
-
-    env:
-      AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
-      AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
 
     steps:
       - name: Checkout codigo
@@ -20,28 +20,36 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: 20
 
       - name: Setup Java para Allure
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: temurin
+          java-version: 11
 
       - name: Instalar dependencias
         run: npm install
 
       - name: Rodar testes de API com Cypress
-        run: npx cypress run --env allure=true,AUTH_USERNAME=${AUTH_USERNAME},AUTH_PASSWORD=${AUTH_PASSWORD}
+        run: npx cypress run --env allure=true,AUTH_USERNAME=${{ secrets.AUTH_USERNAME }},AUTH_PASSWORD=${{ secrets.AUTH_PASSWORD }}
 
       - name: Gerar relatorio Allure
         run: npm run allure:report
 
-      - name: Publicar Allure no GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Allure Report para GitHub Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: reports/allure-report
-          force_orphan: true
+          path: reports/allure-report
+
+  deploy:
+    needs: cypress-api
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy para GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
