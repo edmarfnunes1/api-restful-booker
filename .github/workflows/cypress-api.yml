@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   cypress-api:
@@ -41,9 +38,10 @@ jobs:
       - name: Gerar relatorio Allure
         run: npm run allure:report
 
-      - name: Publicar relatorio Allure como artifact
-        uses: actions/upload-artifact@v4
+      - name: Publicar Allure no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: allure-report
-          path: reports/allure-report
-          retention-days: 7
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: reports/allure-report
+          force_orphan: true
